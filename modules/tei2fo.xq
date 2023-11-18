@@ -9,6 +9,7 @@ xquery version "1.0";
 module namespace t2f="http://history.state.gov/ns/xquery/tei2fo";
 
 declare namespace fo="http://www.w3.org/1999/XSL/Format";
+declare namespace http="http://expath.org/ns/http-client";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
 
 import module namespace xslfo="http://exist-db.org/xquery/xslfo";
@@ -29,7 +30,7 @@ declare variable $t2f:fop-config :=
                         <font kerning="yes" embed-url="http://localhost:8080/exist/apps/release/resources/fonts/pala.ttf" sub-font="Palatino">
                             <font-triplet name="Palatino" style="normal" weight="normal"/>
                         </font>
-                        <font kerning="yes" embed-url="http://localhost:8080/cexist/apps/release/resources/fonts/palab.ttf" sub-font="Palatino Bold">
+                        <font kerning="yes" embed-url="http://localhost:8080/exist/apps/release/resources/fonts/palab.ttf" sub-font="Palatino Bold">
                             <font-triplet name="Palatino" style="normal" weight="bold"/>
                         </font>
                         <font kerning="yes" embed-url="http://localhost:8080/exist/apps/release/resources/fonts/palai.ttf" sub-font="Palatino Italic">
@@ -140,7 +141,7 @@ declare function t2f:render-frus($content as node()*, $options) as element() {
         if ($content/self::tei:TEI) then
             <fo:page-sequence master-reference="title" format="I" initial-page-number="1">
                 <fo:flow flow-name="xsl-region-body">
-                    {t2f:frus-title-page($volume-id)}
+                    {t2f:frus-title-page($volume-id, $options)}
                 </fo:flow>
             </fo:page-sequence>
         else ()
@@ -1422,7 +1423,7 @@ declare function t2f:graphic($node, $options) {
         else
             for $ext in ('svg', 'tiff', 'png')
             let $uri := concat('https://static.history.state.gov/', 'frus-history' (:'frus/', $filename :), '/', $url, '.', $ext)
-            let $response := httpclient:head(xs:anyURI($uri), false(), ())
+            let $response := htto:send-request(<http:request href="{$uri}" method="HEAD"/>)[1]
             return
                 if ($response/@statusCode eq '200') then 
                     let $store := xmldb:store($images-collection, concat($url, '.', $ext), xs:anyURI($uri), concat('image/', if ($ext = 'svg') then 'svg+xml' else $ext))
@@ -1977,7 +1978,7 @@ declare function t2f:toc-head($node as element(tei:head), $options) {
         t2f:recurse($head-sans-note, $options)
 };
 
-declare function t2f:frus-title-page($volume-id) {
+declare function t2f:frus-title-page($volume-id, $options) {
     let $font-family := $options//param[@name='font-family']/@value
     let $font-size-normal := $options//param[@name='font-size-normal']/@value
     let $font-size-small := $options//param[@name='font-size-small']/@value
