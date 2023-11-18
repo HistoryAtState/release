@@ -9,6 +9,4 @@ xmldb:create-collection($target, 'epub-cache'),
 sm:chown(xs:anyURI($target || "/ebook-batch.xq"), "admin"),
 sm:chmod(xs:anyURI($target || "/ebook-batch.xq"), "rwsr-xr-x"),
 sm:chown(xs:anyURI($target || "/public-diplomacy-to-fo-disk.xq"), "admin"),
-sm:chmod(xs:anyURI($target || "/public-diplomacy-to-fo-disk.xq"), "rwsr-xr-x"),
-sm:chown(xs:anyURI($target || "/s3-cache.xq"), "admin"),
-sm:chmod(xs:anyURI($target || "/s3-cache.xq"), "rwsr-xr-x")
+sm:chmod(xs:anyURI($target || "/public-diplomacy-to-fo-disk.xq"), "rwsr-xr-x")
