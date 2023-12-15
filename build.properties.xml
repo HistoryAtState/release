@@ -4,6 +4,7 @@
         <name>release</name>
         <url>http://history.state.gov/ns/apps/release</url>
         <title>Release</title>
-        <version>0.5.0</version>
+        <!-- VERSION SET AUTOMATICALLY DO NOT CHANGE -->
+        <!-- <version>0.5.0</version> -->
     </app>
 </root>
