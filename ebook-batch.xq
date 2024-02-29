@@ -14,8 +14,14 @@ declare option output:media-type "text/html";
 
 declare function local:output-directory() {
     let $username := environment-variable('USER')
+    let $destination-folder-name := concat('frus-ebooks-', substring(xs:string(current-date()), 1, 10))
     return
-        concat('/Users/', $username, '/Downloads/frus-ebooks-', substring(xs:string(current-date()), 1, 10), '/')
+        (: Assumes eXist is running under a macOS user account :)
+        if ($username ne "") then
+            concat('/Users/', $username, '/Downloads/', $destination-folder-name, '/')
+        (: Assumes eXist is running within Docker, and the /tmp/hsg-project-downloads folder is mounted and accessible by the user :)
+        else
+            concat('/tmp/hsg-project-downloads/', $destination-folder-name, '/')
 };
 
 declare function local:generate-mobis() {
