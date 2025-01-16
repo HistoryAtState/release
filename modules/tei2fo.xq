@@ -1423,7 +1423,7 @@ declare function t2f:graphic($node, $options) {
         else
             for $ext in ('svg', 'tiff', 'png')
             let $uri := concat('https://static.history.state.gov/', 'frus-history' (:'frus/', $filename :), '/', $url, '.', $ext)
-            let $response := htto:send-request(<http:request href="{$uri}" method="HEAD"/>)[1]
+            let $response := http:send-request(<http:request href="{$uri}" method="HEAD"/>)[1]
             return
                 if ($response/@statusCode eq '200') then 
                     let $store := xmldb:store($images-collection, concat($url, '.', $ext), xs:anyURI($uri), concat('image/', if ($ext = 'svg') then 'svg+xml' else $ext))
