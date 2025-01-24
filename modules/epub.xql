@@ -704,15 +704,22 @@ declare function epub:frus-div-to-li($div as element(tei:div), $suppress-documen
                     </li>
         (: show all divs with @xml:id :)
         else
+            let $child-docs := $div/tei:div[@type eq "document"]
+            let $labels := if ($div/ancestor::tei:back) then ("Appendix", "Appendixes") else ("Document", "Documents")
+            let $label := if (count($child-docs) eq 1) then $labels[1] else $labels[2]
+            return
             if ($options = 'mobi') then
                 <blockquote xmlns="http://www.w3.org/1999/xhtml">
                     <a href="{concat($div/@xml:id, '.html')}">{
                         normalize-space(frus:head-sans-note($div))
                     }</a>
                     {
-                    if ($div[tei:div/@type eq 'document']) then
+                    if ($child-docs) then
                         if ($suppress-documents) then
-                            concat(' (Documents ', $div/tei:div[@n][1]/@n, '-', $div/tei:div[@n][last()]/@n, ')')
+                            if (count($child-docs) gt 1) then 
+                                concat(' (', $label, ' ', $child-docs[@n][1]/@n, '–', $child-docs[@n][last()]/@n, ')')
+                            else
+                                concat(' (', $label, ' ', $child-docs[@n][1]/@n, ')')
                         else ()
                     else
                         ()
@@ -728,9 +735,12 @@ declare function epub:frus-div-to-li($div as element(tei:div), $suppress-documen
                         normalize-space(frus:head-sans-note($div))
                     }</a>
                     {
-                    if ($div[tei:div/@type eq 'document']) then
+                    if ($child-docs) then
                         if ($suppress-documents) then
-                            concat(' (Documents ', $div/tei:div[@n][1]/@n, '-', $div/tei:div[@n][last()]/@n, ')')
+                            if (count($child-docs) gt 1) then 
+                                concat(' (', $label, ' ', $child-docs[@n][1]/@n, '–', $child-docs[@n][last()]/@n, ')')
+                            else
+                                concat(' (', $label, ' ', $child-docs[@n][1]/@n, ')')
                         else ()
                     else
                         ()
