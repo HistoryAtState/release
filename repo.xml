@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<meta xmlns="http://exist-db.org/xquery/repo" commit-id="5b18c2fc67169ebb42fa1efe941f60f14f81547f" commit-time="1709166034">
+    <description>Release</description>
+    <author>Office of the Historian</author>
+    <website>https://history.state.gov</website>
+    <status/>
+    <license/>
+    <copyright/>
+    <type>application</type>
+    <target>release</target>
+    <prepare>pre-install.xql</prepare>
+    <finish>post-install.xql</finish>
+    <permissions xmlns:repo="http://exist-db.org/xquery/repo" password="" user="hsg" group="hsg"
+        mode="rw-rw-r--"/>
+</meta>
