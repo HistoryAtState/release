@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<div xmlns="http://www.w3.org/1999/xhtml" id="about">
+<div id="about" xmlns="http://www.w3.org/1999/xhtml">
     <h1>About the Electronic Edition</h1>
     <p>The Office of the Historian at the U.S. Department of State has embarked on a program to
         release an ebook edition of the <em>Foreign Relations of the United States</em>
@@ -25,6 +25,7 @@
         visit our <a href="http://history.state.gov/historicaldocuments/ebooks">ebooks homepage</a>,
         and follow us on Twitter at <a href="http://twitter.com/HistoryAtState">@HistoryAtState</a>
         and Tumblr at <a href="http://HistoryAtState.tumblr.com">HistoryAtState</a>.</p>
-    <p style="text-align: right; font-weight: bold;">Office of the Historian<br/> Foreign Service
-        Institute<br/> U.S. Department of State<br/> <span class="ho:generate-month-year"/></p>
+    <p style="text-align: right; font-weight: bold;">Office of the Historian <br/> Shared Knowledge
+        Services <br/> Bureau of Administration <br/> U.S. Department of State <br/>
+        <span class="ho:generate-month-year"/></p>
 </div>

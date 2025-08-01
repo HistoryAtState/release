@@ -91,7 +91,7 @@ declare function epub:save-frus-epub-to-disk($path-to-tei-document as xs:string,
     let $item := doc($path-to-tei-document)
     let $titles := $item//tei:titleStmt/tei:title
     let $title := normalize-space(concat($titles[@type eq 'volume'], ' (', string-join(($titles[@type eq 'series'], $titles[@type eq 'sub-series'], $titles[@type eq 'volume-number'])[. ne ''], ', '), ')'))
-    let $creator := 'Office of the Historian, Foreign Service Institute, United States Department of State'
+    let $creator := 'Office of the Historian, Shared Knowledge Services, Bureau of Administration, United States Department of State'
     let $text := $item//tei:text
     let $urn := concat($vol-id, '-', current-dateTime())
     let $db-path-to-resources := '/db/apps/release/resources'
