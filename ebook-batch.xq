@@ -33,7 +33,7 @@ cd mobi-bound;
 
 # and fire off the conversion
 
-find . -type f -iname "*.epub" | /usr/local/bin/parallel --timeout 14400 --progress "/Applications/calibre.app/Contents/MacOS/ebook-convert {} {.}.mobi";
+find . -type f -iname "*.epub" | parallel --timeout 14400 --progress "ebook-convert {} {.}.mobi";
 
 # move the mobis into the mobi directory
 
