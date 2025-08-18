@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <div id="about" xmlns="http://www.w3.org/1999/xhtml">
-    <h1>About the Electronic Edition</h1>
+    <h1>About the Ebook Edition</h1>
     <p>The Office of the Historian at the U.S. Department of State has embarked on a program to
         release an ebook edition of the <em>Foreign Relations of the United States</em>
             (<em>FRUS</em>) series, which was established in 1861. Far lighter and more portable
         than printed editions of <em>FRUS</em>, the ebook edition offers the full content of each
         volume and makes use of the full-text search and other reading features of most ebook
-        devices and applications, including bookmarking and note-taking. Unlike the web-based
-        edition of <em>FRUS</em>, the ebook edition, once downloaded, can be accessed even without
-        internet connectivity.</p>
+        devices and applications, including bookmarking and note-taking. Unlike the online,
+        web-based edition of <em>FRUS</em>, the ebook edition, once downloaded, can be accessed even
+        without internet connectivity.</p>
     <p>In creating the <em>FRUS</em> ebook edition, we endeavored to maintain fidelity with the
         original printed edition. One challenge in this respect is representing original page
         numbers from printed editions in ebooks. For readers who need to cite material in this
@@ -22,10 +22,9 @@
             href="mailto:history_ebooks@state.gov?subject=FRUS%20ebooks%20Feedback&amp;body=Your%20e-reader%3A%0A%0AVolume%3A%0A%0AComments%3A"
             >history_ebooks@state.gov</a> with any feedback.</p>
     <p>To learn about updates to this ebook, other ebooks, and the ebook initiative in general,
-        visit our <a href="http://history.state.gov/historicaldocuments/ebooks">ebooks homepage</a>,
-        and follow us on Twitter at <a href="http://twitter.com/HistoryAtState">@HistoryAtState</a>
-        and Tumblr at <a href="http://HistoryAtState.tumblr.com">HistoryAtState</a>.</p>
-    <p style="text-align: right; font-weight: bold;">Office of the Historian <br/> Shared Knowledge
+        visit our <a href="http://history.state.gov/historicaldocuments/ebooks">ebooks homepage</a>
+        and follow us on X at <a href="http://x.com/HistoryAtState">@HistoryAtState</a>.</p>
+    <p style="text-align: right"><strong>Office of the Historian</strong> <br/> Shared Knowledge
         Services <br/> Bureau of Administration <br/> U.S. Department of State <br/>
         <span class="ho:generate-month-year"/></p>
 </div>

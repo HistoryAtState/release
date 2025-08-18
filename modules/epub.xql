@@ -316,12 +316,10 @@ declare function epub:cover-xhtml-entry($title) {
     @return the entry for the OEBPS/cover.html file
 :)
 declare function epub:title-xhtml-entry($volume-id) {
-    let $volume := collection('/db/apps/frus/bibiliography')/volume[@id eq $volume-id]
+    let $volume := collection('/db/apps/frus/volumes')/tei:TEI[@xml:id eq $volume-id]
     let $editor-roles-to-display := ('primary', 'general')
-    let $editors := $volume/editor[@role = $editor-roles-to-display and . ne '']
-    let $published-year := $volume/published-year/string()
-    let $office-name := $volume/office-name/string()
-    let $office-parent := $volume/office-parent/string()
+    let $editors := $volume//tei:editor[@role = $editor-roles-to-display and . ne '']
+    let $published-year := $volume//tei:date[@type eq "publication-date"]/substring(., 1, 4)
     let $body :=
         <div xmlns="http://www.w3.org/1999/xhtml" id="title">
             <h3>{concat(frus:volume-title($volume-id, 'series'), ', ', frus:volume-title($volume-id, 'sub-series'))}</h3>
@@ -353,19 +351,20 @@ declare function epub:title-xhtml-entry($volume-id) {
             }
             <hr/>
             <p>
-                United States Government Publishing Office <br/>
+                U.S. Department of State <br/>
                 Washington <br/>
                 {$published-year}
             </p>
             <p>
-                U.S. Department of State <br/>
-                {$office-name} <br/>
-                {$office-parent}
+                Office of the Historian <br/>
+                Shared Knowledge Services <br/>
+                Bureau of Administration <br/>
+                U.S. Department of State
             </p>
             <hr/>
             <p>
                 This ebook was generated on {format-date(current-date(), "[MNn] [D1], [Y0001]")}.<br/>
-                Please visit the Office of the Historian <a href="http://history.state.gov/historicaldocuments/ebooks">ebooks web page</a> to access updates.
+                Please visit the Office of the Historian <a href="https://history.state.gov/historicaldocuments/ebooks">ebooks web page</a> to access updates.
             </p>
         </div>
     let $title := 'Title page'
@@ -382,7 +381,7 @@ declare function epub:title-xhtml-entry($volume-id) {
 :)
 declare function epub:about-xhtml-entry() {
     let $body := epub:process-xhtml(doc('/db/apps/release/resources/boilerplate/frus-about.xml'))
-    let $title := 'About the Electronic Edition'
+    let $title := 'About the Ebook Edition'
     let $cover-xhtml := epub:assemble-xhtml($title, $body)
     return
         <entry name="OEBPS/about-epub.html" type="xml">{$cover-xhtml}</entry>
@@ -446,7 +445,7 @@ declare function epub:body-xhtml-entries($text, $options) {
     (: TODO only log at discrete points, like every 5% or 10% :)
     for $div at $n in $divs
     let $log :=
-        if ($div/@type='document') then () else console:log(concat('generating body-xhtml-entry for ', $div/@xml:id))
+        if ($div/@type=('document', 'document-pending')) then () else console:log(concat('generating body-xhtml-entry for ', $div/@xml:id))
         (:console:log(concat('generating body-xhtml-entry for ', $div/@xml:id)):)
     let $title := frus:head-sans-note($div)
     let $body := epub:process-div($div, $title, $options)
@@ -483,11 +482,11 @@ declare function epub:process-div($div as element(tei:div), $title, $options) {
         </parameters>
     return
         (: just render documents, sections :)
-        if ($div/@type = ('document', 'section')) then
+        if ($div/@type = ('document', 'document-pending', 'section', 'section-pending')) then
             render:render($div, $parameters)
         else
-            let $child-documents-to-show := $div/tei:div[@type='document']
-            let $has-inner-sections := $div/tei:div[@type != 'document']
+            let $child-documents-to-show := $div/tei:div[@type=('document', 'document-pending')]
+            let $has-inner-sections := $div/tei:div[not(@type = ('document', 'document-pending'))]
             let $notes := $div/tei:head/tei:note
             return
                 <div xmlns="http://www.w3.org/1999/xhtml">
@@ -545,7 +544,15 @@ declare function epub:process-div($div as element(tei:div), $title, $options) {
                     return
                         (
                         <hr class="list"/>,
-                        <h4><a href="{concat($docid, '.html')}">{if (not(starts-with($document/tei:head, concat($document/@n, '.')))) then concat('[', $docnumber, ']') else concat($docnumber, '. '), $doctitle}</a></h4>,
+                        <h4><a href="{concat($docid, '.html')}">{
+                            if ($document/@type eq "document-pending") then
+                                ()
+                            else if (not(starts-with($document/tei:head, concat($document/@n, '.')))) then 
+                                concat('[', $docnumber, ']')
+                            else
+                                concat($docnumber, '. '), 
+                            $doctitle
+                        }</a></h4>,
                         <p class="dateline">{$docdateline}</p>,
                         if (exists($docsummary)) then <p>{$docsummary}</p> else (),
                         <p class="sourcenote">{$docsource}</p>
@@ -558,7 +565,7 @@ declare function epub:process-div($div as element(tei:div), $title, $options) {
                         <div>
                             <h2>Contents</h2>
                             <ul>{
-                                epub:frus-toc-to-li($div/tei:div[not(@type='document')], true(), $options)
+                                epub:frus-toc-to-li($div/tei:div[not(@type=('document', 'document-pending'))], true(), $options)
                             }</ul>
                         </div>
                         )
@@ -687,7 +694,7 @@ declare function epub:frus-div-to-li($div as element(tei:div), $suppress-documen
         (: supress original print TOC, since we generate an ePub-specific one :)
         else if ($id = $epub:frus-div-xmlids-to-suppress) then
             ()
-        else if ($div/@type = ('document', 'introduction')) then
+        else if ($div/@type = ('document', 'document-pending', 'introduction')) then
             if ($suppress-documents) then ()
             else
                 if ($options = 'mobi') then
@@ -704,7 +711,7 @@ declare function epub:frus-div-to-li($div as element(tei:div), $suppress-documen
                     </li>
         (: show all divs with @xml:id :)
         else
-            let $child-docs := $div/tei:div[@type eq "document"]
+            let $child-docs := $div/tei:div[@type eq ("document", "document-pending")]
             let $labels := if ($div/ancestor::tei:back) then ("Appendix", "Appendixes") else ("Document", "Documents")
             let $label := if (count($child-docs) eq 1) then $labels[1] else $labels[2]
             return
@@ -731,10 +738,16 @@ declare function epub:frus-div-to-li($div as element(tei:div), $suppress-documen
                 </blockquote>
             else
                 <li xmlns="http://www.w3.org/1999/xhtml">
+                    <span>{
+                    if (ends-with($div/@type, "-pending")) then
+                        attribute style { "font-style: italic;" }
+                    else
+                        ()
+                    ,
                     <a href="{concat($div/@xml:id, '.html')}">{
                         normalize-space(frus:head-sans-note($div))
                     }</a>
-                    {
+                    ,
                     if ($child-docs) then
                         if ($suppress-documents) then
                             if (count($child-docs) gt 1) then 
@@ -744,10 +757,12 @@ declare function epub:frus-div-to-li($div as element(tei:div), $suppress-documen
                         else ()
                     else
                         ()
-                    ,
-                    if ($div//tei:div[@xml:id and not(@type = ('document', 'introduction'))] or not($suppress-documents)) then
+                    }</span>
+                    {
+                    if ($div//tei:div[@xml:id and not(@type = ('document', 'document-pending', 'introduction'))] or not($suppress-documents)) then
                         <ul>{ epub:recurse-li($div, $suppress-documents, $options) }</ul>
-                    else ()
+                    else 
+                        ()
                     }
                 </li>
 };
