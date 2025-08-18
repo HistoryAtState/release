@@ -197,11 +197,11 @@ declare function render:head($node as element(tei:head), $options) as element()*
         let $style := if ($rendition) then attribute style {render:rendition-to-css($rendition)} else ()
         let $type := $node/parent::tei:div/@type
         return
-            if ($type = ('section', 'appendix', 'compilation', 'part') ) then
+            if ($type = ('section', 'section-pending', 'appendix', 'compilation', 'compilation-pending', 'part') ) then
                 if ($type eq 'section' and $options/*:param[@name='suppress-head-if-first-div']/@value eq 'true') then ()
                 else
                     <h2>{$style, render:recurse($node, $options)}</h2>
-            else if ($type = ('document', 'subchapter', 'chapter', 'chapter-introduction', 'part') ) then
+            else if ($type = ('document', 'document-pending', 'subchapter', 'chapter', 'chapter-pending', 'chapter-introduction', 'part') ) then
                 (
                 (: show a bracketed document number for volumes that don't use document numbers :)
             	if ($type = 'document' and not(starts-with($node, concat($node/parent::tei:div/@n, '.')) or starts-with($node, concat('No. ', $node/parent::tei:div/@n)))) then
