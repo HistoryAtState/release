@@ -3,6 +3,7 @@ xquery version "3.0";
 import module namespace release = "http://history.state.gov/ns/xquery/release" at "modules/release.xql";
 import module namespace epub = "http://history.state.gov/ns/xquery/epub" at "modules/epub.xql";
 import module namespace frus = "http://history.state.gov/ns/xquery/frus" at "modules/frus.xql";
+import module namespace epub3 = "http://history.state.gov/ns/xquery/epub3/epub" at "modules/epub3.xql";
 
 import module namespace console="http://exist-db.org/xquery/console";
 import module namespace process="http://exist-db.org/xquery/process" at "java:org.exist.xquery.modules.process.ProcessModule";
@@ -101,6 +102,8 @@ declare function local:generate-ebooks($vol-ids, $format) {
                 let $operation :=
                     if ($f = 'epub') then
                         epub:save-frus-epub-to-disk($tei-content-data-path, (), $file-system-output-dir)
+                    else if ($f = 'epub3') then
+                        epub3:save-frus-epub-to-disk($tei-content-data-path, (), $file-system-output-dir)
                     else (: if ($f = 'mobi') then :)
                         epub:save-frus-epub-to-disk($tei-content-data-path, 'mobi', $file-system-output-dir)
                 let $end-time := util:system-time()
@@ -131,7 +134,7 @@ declare variable $local:ebook-format-options :=
         <items>
             <item>
                 <value>epub</value>
-                <label>EPUB</label>
+                <label>EPUB 2</label>
             </item>
             <item>
                 <value>mobi-bound</value>
@@ -140,6 +143,10 @@ declare variable $local:ebook-format-options :=
             <item>
                 <value>all</value>
                 <label>Both</label>
+            </item>
+            <item>
+                <value>epub3</value>
+                <label>EPUB 3</label>
             </item>
         </items>
     </code-table>
