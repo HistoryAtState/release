@@ -647,17 +647,17 @@ declare function render:ref($node as element(tei:ref), $options) as item()* {
                         $type,
                         render:recurse($node, $options)
                         }
-                (: ref to a document :)
-                else if (matches($target, '^#d\d+$')) then
+                (: ref to a document, with optional prefix e.g., eta_d2 :)
+                else if (matches($target, '^#([a-z]{2,3}_)?d\d+$')) then
                     element a {
                         attribute href { concat( substring-after($target, '#'), '.html') },
                         $type,
                         render:recurse($node, $options)
                         }
                 (: ref to a portion of a document, e.g., footnote :)
-                else if (matches($target, '^#d\d+.+')) then
+                else if (matches($target, '^#(\w{1,3}_)?d\d+.+')) then
                     element a {
-                        attribute href { concat( replace($target, '^#(d\d+)(.+)$', '$1'), '.html', $target) },
+                        attribute href { concat( replace($target, '^#((?:[a-z]{2,3}_)?d\d+)(.+)$', '$1'), '.html', $target) },
                         $type,
                         render:recurse($node, $options)
                         }
