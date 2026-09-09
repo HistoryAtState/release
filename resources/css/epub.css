@@ -145,8 +145,32 @@ ul.subject li.subjectallcaps {
 li.subjectflushleft {
     padding-bottom: 1em;
 }
+/* A nested list inside a participants/subject list is a GROUP — a labeled block
+   ("State:", "OSD:") or, in the newer volumes, an unlabeled delegation — and in
+   the printed volumes a group is set at the SAME indent as an ungrouped name,
+   separated only by the blank line below. See frus1981-88v44p1 p. 173, where
+   the agency labels sit exactly on the names' measure.
+
+   Without the pull-back the indent compounds, because `ul.subject li` above is a
+   descendant selector and so applies its 4em at every depth: a one-group list
+   put its names 4em too deep and a two-group list 8em (frus1981-88v16 d478 and
+   d471, measured at 94px and 152px against an ungrouped item's 37px). The
+   negative margin cancels the wrapping <li>'s indent at whatever depth it
+   occurs, so grouped and ungrouped names land on the same measure.
+
+   This does not disturb the published corpus. Where the nested list has a <head>
+   the transform emits <li><li class="subjectallcaps">…</li><ul>…</ul></li>, and
+   the HTML parser auto-closes the outer <li>, so the <ul> is never inside an <li>
+   to begin with and none of these rules match it. Only a headless group — the
+   shape the newer volumes use and legacy almost never does — nests cleanly
+   enough to compound. */
 ul.subject li ul {
     padding-bottom: 1em;
+    margin-left: -4em;
+}
+/* a group's own label aligns with the names it heads, not with PARTICIPANTS */
+ul.subject li ul > li.subjectallcaps {
+    padding-left: 2em;
 }
 p.subjectallcaps {
     font-size: smaller;
